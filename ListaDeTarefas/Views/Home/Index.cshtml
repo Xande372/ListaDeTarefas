@@ -1,8 +1,120 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model IEnumerable<Tarefa>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+<div class="row">
+
+    <div class="col-md-2">
+
+        <form asp-action="Filtrar" asp-controller="Home" method="post">
+
+            <div class="mb-3">
+
+                <label class="form-label">Categoria:</label>
+
+                <Select
+                    name="filtro"
+                    class="form-select"
+                    asp-items="@(new SelectList(ViewBag.Categorias, "CategoriaId", "Nome", ViewBag.Filtros.CategoriaId))"
+                >
+                <options value="todos">Todos</options>
+                </Select>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">Data de Vencimento:</label>
+
+                <Select
+                    name="filtro"
+                    class="form-select"
+                    asp-items="@(new SelectList(ViewBag.VencimentoValores, "Key", "Value", ViewBag.Filtros.Vencimento))"
+                >
+                    <options value="todos">Todos</options>
+                </Select>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">Situação:</label>
+
+                <Select
+                    name="filtro"
+                    class="form-select"
+                    asp-items="@(new SelectList(ViewBag.Status, "StatusId", "Nome", ViewBag.Filtros.StatusId))"
+                >
+                    <options value="todos">Todos</options>
+                </Select>
+
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Filtrar
+            </button>
+
+            <a asp-action="Index" asp-route-id="" class="btn btn-primary">
+                Limpar
+            </a>
+
+        </Form>
+
+    </div>
+
+    <div class="col-md-10">
+
+        <Form asp-action="MarcarCompleto" method="post" asp-route-id="@ViewBag.Filtros.FiltroString">
+
+            <table class="table table-bordered table-striped mt-2">
+                <thead>
+                    <tr>
+                        <th>Descrição</th>
+                        <th>Categoria</th>
+                        <th>Data de vencimento</th>
+                        <th>Status</th>
+                        <th class="w-25"></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (Tarefa tarefa in Model)
+                    {
+                        string atrasado = tarefa.Atrasado ? "bg-warning" : "";
+
+                        <tr>
+                            <td class="@atrasado">@tarefa.Descricao</td>
+                            <td class="@atrasado">@tarefa.Categoria.Nome</td>
+                            <td class="@atrasado">@tarefa.DataVencimento?.ToShortDateString()</td>
+                            <td class="@atrasado">@tarefa.Status.Nome</td>
+
+                            <td>
+                                @if(tarefa.StatusId == "aberto")
+                                {
+                                    <button type="submit" class="btn btn-primary btn-sm" name="@nameof(Tarefa.Id)" value="@tarefa.Id">
+                                        Completar
+                                    </button>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+
+        </Form>
+
+        <form asp-action="DeletarCompletos">
+
+            <a asp-action="Adicionar" asp-controller="Home" class="btn btn-success">
+                Adicionar tarefa
+            </a>
+
+            <button type="submit" class="btn btn-danger">
+                Deletar tarefas completas
+            </button>
+
+        </form>
+
+    </div>
+
 </div>
