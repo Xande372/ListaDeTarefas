@@ -16,7 +16,7 @@
                     class="form-select"
                     asp-items="@(new SelectList(ViewBag.Categorias, "CategoriaId", "Nome", ViewBag.Filtros.CategoriaId))"
                 >
-                <options value="todos">Todos</options>
+                    <option value="todos">Todos</option>
                 </Select>
 
             </div>
@@ -30,7 +30,7 @@
                     class="form-select"
                     asp-items="@(new SelectList(ViewBag.VencimentoValores, "Key", "Value", ViewBag.Filtros.Vencimento))"
                 >
-                    <options value="todos">Todos</options>
+                    <option value="todos">Todos</option>
                 </Select>
 
             </div>
@@ -44,7 +44,7 @@
                     class="form-select"
                     asp-items="@(new SelectList(ViewBag.Status, "StatusId", "Nome", ViewBag.Filtros.StatusId))"
                 >
-                    <options value="todos">Todos</options>
+                    <option value="todos">Todos</option>
                 </Select>
 
             </div>
@@ -103,7 +103,7 @@
 
         </Form>
 
-        <form asp-action="DeletarCompletos">
+        <form asp-action="DeletarCompletos" method="post" asp-route-id="@ViewBag.Filtros.FiltroString">
 
             <a asp-action="Adicionar" asp-controller="Home" class="btn btn-success">
                 Adicionar tarefa
